@@ -11,6 +11,18 @@ public class Controllers {
     @GetMapping("/")
     public String home(final Model model) {
 
+        return "home.html";
+    }
+
+    @GetMapping("/updateWallet")
+    public String updateWallet(final Model model) {
+
+        return "update-wallet.html";
+    }
+
+    @GetMapping("/payments")
+    public String payments(final Model model) {
+
         model.addAttribute("payments", Database.getPayments());
         return "payments.html";
     }
