@@ -12,6 +12,6 @@ public class Controllers {
     public String home(final Model model) {
 
         model.addAttribute("payments", Database.getPayments());
-        return "index";
+        return "payments";
     }
 }
