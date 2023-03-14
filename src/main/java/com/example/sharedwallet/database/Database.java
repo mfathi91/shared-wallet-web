@@ -50,4 +50,19 @@ public class Database {
         }
         return payments;
     }
+
+    public static List<Wallet> getWallets() {
+
+        final List<Wallet> wallets = new ArrayList<>();
+        try (final Connection conn = connect();
+             final Statement stmt = conn.createStatement()) {
+            final ResultSet rs = stmt.executeQuery("SELECT * FROM wallets");
+            while (rs.next()) {
+                wallets.add(new Wallet(rs.getString("wallet")));
+            }
+        } catch (final SQLException e) {
+            throw new IllegalStateException(String.format("Unable to read from the database. Reason: %s", e));
+        }
+        return wallets;
+    }
 }
