@@ -15,7 +15,7 @@
 	<description>An app for managing my shared wallets</description>
 	<properties>
         <java.version>17</java.version>
-        <spring-boot.version>3.0.2</spring-boot.version>
+        <spring-boot.version>3.0.4</spring-boot.version>
         <sqlite.version>3.40.1.0</sqlite.version>
 	</properties>
 	<dependencies>
