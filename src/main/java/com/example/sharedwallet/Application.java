@@ -2,12 +2,14 @@ package com.example.sharedwallet;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.yaml.snakeyaml.error.MissingEnvironmentVariableException;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @SpringBootApplication
+@ConfigurationPropertiesScan
 public class Application {
 
     public static void main(final String[] args) {
