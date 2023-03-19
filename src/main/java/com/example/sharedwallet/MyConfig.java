@@ -2,6 +2,14 @@ package com.example.sharedwallet;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "myconfig")
-public record MyConfig(String name, int age, String city) {
+import java.util.List;
+
+@ConfigurationProperties(prefix = "app-config")
+public record MyConfig(List<Wallet> wallets, List<User> users) {
+}
+
+record Wallet(String currency, String symbol) {
+}
+
+record User(String username, String password) {
 }

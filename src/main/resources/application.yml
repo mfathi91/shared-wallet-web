@@ -1,4 +1,13 @@
-myconfig:
-  name: 'Muti'
-  age: 31
-  city: 'Wu'
+app-config:
+  wallets:
+    - currency: 'Dollar'
+      symbol: '$'
+    - currency: 'Euro'
+      symbol: '€'
+    - currency: 'Toman'
+      symbol: 'T'
+  users:
+    - username: 'Julia'
+      password: 'JuliasPassword'
+    - username: 'Jack'
+      password: 'JacksPassword'
