@@ -32,7 +32,7 @@ public class Payment {
     private BigDecimal amount;
 
     @Column(nullable = false)
-    private String description;
+    private String note;
 
     @Column(nullable = false)
     private LocalDateTime dateTime;
@@ -40,12 +40,12 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(Long id, Wallet wallet, User user, BigDecimal amount, String description, LocalDateTime dateTime) {
+    public Payment(Long id, Wallet wallet, User user, BigDecimal amount, String note, LocalDateTime dateTime) {
         this.id = id;
         this.wallet = wallet;
         this.user = user;
         this.amount = amount;
-        this.description = description;
+        this.note = note;
         this.dateTime = dateTime;
     }
 
@@ -81,12 +81,12 @@ public class Payment {
         this.amount = amount;
     }
 
-    public String getDescription() {
-        return description;
+    public String getNote() {
+        return note;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public LocalDateTime getDateTime() {
@@ -104,7 +104,7 @@ public class Payment {
                 ", wallet=" + wallet +
                 ", user=" + user +
                 ", amount=" + amount +
-                ", description='" + description + '\'' +
+                ", note='" + note + '\'' +
                 ", dateTime=" + dateTime +
                 '}';
     }

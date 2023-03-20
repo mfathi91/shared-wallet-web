@@ -22,7 +22,7 @@
         <div class="mb-3">
             <label for="payer" class="form-label">Whose balance to increase?</label>
             <select class="form-select" id="payer" name="payer">
-                <option th:each="user : ${users}" th:value="${user.name}" th:text="${user.name}"></option>
+                <option th:each="user : ${users}" th:value="${user.username}" th:text="${user.username}"></option>
             </select>
         </div>
         <div class="mb-3">

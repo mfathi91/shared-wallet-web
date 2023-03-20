@@ -1,5 +1,8 @@
 package com.example.sharedwallet;
 
+import com.example.sharedwallet.model.Payment;
+import com.example.sharedwallet.repository.UserRepository;
+import com.example.sharedwallet.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,11 +10,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
+
 @Controller
 public class Controllers {
 
     @Autowired
     private AppConfig appConfig;
+
+    @Autowired
+    private WalletRepository walletRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/")
     public String home(final Model model) {
@@ -23,14 +34,14 @@ public class Controllers {
     @GetMapping("/updateWallet")
     public String updateWalletGet(final Model model) {
 
-//        model.addAttribute("wallets", Database.getWallets());
-//        model.addAttribute("users", Database.getUsers());
+        model.addAttribute("wallets", walletRepository.findAll());
+        model.addAttribute("users", userRepository.findAll());
         return "update-wallet.html";
     }
 
     @PostMapping("/updateWallet")
     public String updateWalletPost(@RequestParam("wallet") String wallet, @RequestParam("payer") String payer,
-            @RequestParam int amount, @RequestParam String note) {
+            @RequestParam BigDecimal amount, @RequestParam String note) {
 
         System.out.println(wallet);
         System.out.println(payer);
