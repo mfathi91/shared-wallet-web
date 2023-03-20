@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class Controllers {
 
     @Autowired
-    private MyConfig myConfig;
+    private AppConfig appConfig;
 
     @GetMapping("/")
     public String home(final Model model) {
 
-        System.out.println(myConfig);
+        System.out.println(appConfig);
         return "home.html";
     }
 

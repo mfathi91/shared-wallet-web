@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class DatabaseInitializer implements CommandLineRunner {
 
     @Autowired
-    private MyConfig myConfig;
+    private AppConfig appConfig;
 
     @Autowired
     private WalletRepository walletRepository;
@@ -24,15 +24,15 @@ public class DatabaseInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         if (walletRepository.count() == 0) {
-            for (int i=0; i<myConfig.wallets().size(); i++) {
-                final var configuredWallet = myConfig.wallets().get(i);
+            for (int i = 0; i< appConfig.wallets().size(); i++) {
+                final var configuredWallet = appConfig.wallets().get(i);
                 walletRepository.save(new Wallet((long) i+1, configuredWallet.currency(), configuredWallet.symbol()));
             }
         }
 
         if (userRepository.count() == 0) {
-            for (int i=0; i<myConfig.users().size(); i++) {
-                final var configuredWallet = myConfig.users().get(i);
+            for (int i = 0; i< appConfig.users().size(); i++) {
+                final var configuredWallet = appConfig.users().get(i);
                 userRepository.save(new User((long) i+1, configuredWallet.username(), configuredWallet.password()));
             }
         }
