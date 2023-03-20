@@ -6,6 +6,8 @@ import com.example.sharedwallet.model.Wallet;
 import com.example.sharedwallet.repository.PaymentRepository;
 import com.example.sharedwallet.repository.UserRepository;
 import com.example.sharedwallet.repository.WalletRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,10 +33,11 @@ public class Controllers {
     @Autowired
     private PaymentRepository paymentRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(Controllers.class);
+
     @GetMapping("/")
     public String home(final Model model) {
 
-        System.out.println(appConfig);
         return "home.html";
     }
 
@@ -50,15 +53,13 @@ public class Controllers {
     public String updateWalletPost(@RequestParam("wallet") String currency, @RequestParam("payer") String payer,
             @RequestParam BigDecimal amount, @RequestParam String note) {
 
-        System.out.println(currency);
-        System.out.println(payer);
-        System.out.println(amount);
-        System.out.println(note);
-        final User foundPayer = userRepository.findByUsername(payer);
-        final Wallet foundWallet = walletRepository.findByCurrency(currency);
+        final User foundPayer = userRepository.findByUsername(payer)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("No user with name [%s] found!", payer)));
+        final Wallet foundWallet = walletRepository.findByCurrency(currency)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("No wallet with currency [%s] found", currency)));
         if (foundPayer != null && foundWallet != null) {
-            System.out.println(String.format("Payer %s found", foundPayer));
-            System.out.println(String.format("Wallet %s found", foundWallet));
+            logger.info(String.format("Payer %s found", foundPayer));
+            logger.info(String.format("Wallet %s found", foundWallet));
             paymentRepository.save(new Payment(foundWallet, foundPayer, amount, note, LocalDateTime.now()));
         }
         return "success.html";
