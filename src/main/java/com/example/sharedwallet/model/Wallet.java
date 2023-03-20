@@ -55,26 +55,6 @@ public class Wallet {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Wallet wallet = (Wallet) o;
-
-        if (!id.equals(wallet.id)) return false;
-        if (!currency.equals(wallet.currency)) return false;
-        return symbol.equals(wallet.symbol);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + currency.hashCode();
-        result = 31 * result + symbol.hashCode();
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "Wallet{" +
                 "id=" + id +
