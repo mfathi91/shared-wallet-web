@@ -1,6 +1,8 @@
 package com.example.sharedwallet;
 
 import com.example.sharedwallet.model.Payment;
+import com.example.sharedwallet.model.User;
+import com.example.sharedwallet.model.Wallet;
 import com.example.sharedwallet.repository.PaymentRepository;
 import com.example.sharedwallet.repository.UserRepository;
 import com.example.sharedwallet.repository.WalletRepository;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Controller
 public class Controllers {
@@ -44,13 +47,20 @@ public class Controllers {
     }
 
     @PostMapping("/updateWallet")
-    public String updateWalletPost(@RequestParam("wallet") String wallet, @RequestParam("payer") String payer,
+    public String updateWalletPost(@RequestParam("wallet") String currency, @RequestParam("payer") String payer,
             @RequestParam BigDecimal amount, @RequestParam String note) {
 
-        System.out.println(wallet);
+        System.out.println(currency);
         System.out.println(payer);
         System.out.println(amount);
         System.out.println(note);
+        final User foundPayer = userRepository.findByUsername(payer);
+        final Wallet foundWallet = walletRepository.findByCurrency(currency);
+        if (foundPayer != null && foundWallet != null) {
+            System.out.println(String.format("Payer %s found", foundPayer));
+            System.out.println(String.format("Wallet %s found", foundWallet));
+            paymentRepository.save(new Payment(foundWallet, foundPayer, amount, note, LocalDateTime.now()));
+        }
         return "success.html";
     }
 
