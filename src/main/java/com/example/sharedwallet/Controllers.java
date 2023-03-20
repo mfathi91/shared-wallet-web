@@ -1,6 +1,7 @@
 package com.example.sharedwallet;
 
 import com.example.sharedwallet.database.Database;
+import com.example.sharedwallet.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
