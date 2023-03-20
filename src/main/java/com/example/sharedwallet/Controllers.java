@@ -1,7 +1,5 @@
 package com.example.sharedwallet;
 
-import com.example.sharedwallet.database.Database;
-import com.example.sharedwallet.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,8 +23,8 @@ public class Controllers {
     @GetMapping("/updateWallet")
     public String updateWalletGet(final Model model) {
 
-        model.addAttribute("wallets", Database.getWallets());
-        model.addAttribute("users", Database.getUsers());
+//        model.addAttribute("wallets", Database.getWallets());
+//        model.addAttribute("users", Database.getUsers());
         return "update-wallet.html";
     }
 
@@ -44,7 +42,7 @@ public class Controllers {
     @GetMapping("/payments")
     public String payments(final Model model) {
 
-        model.addAttribute("payments", Database.getPayments());
+//        model.addAttribute("payments", Database.getPayments());
         return "payments.html";
     }
 }
