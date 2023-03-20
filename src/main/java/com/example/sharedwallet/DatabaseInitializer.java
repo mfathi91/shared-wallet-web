@@ -24,16 +24,14 @@ public class DatabaseInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         if (walletRepository.count() == 0) {
-            for (int i = 0; i< appConfig.wallets().size(); i++) {
-                final var configuredWallet = appConfig.wallets().get(i);
-                walletRepository.save(new Wallet((long) i+1, configuredWallet.currency(), configuredWallet.symbol()));
+            for (final var wallet : appConfig.wallets()) {
+                walletRepository.save(new Wallet(wallet.currency(), wallet.symbol()));
             }
         }
 
         if (userRepository.count() == 0) {
-            for (int i = 0; i< appConfig.users().size(); i++) {
-                final var configuredWallet = appConfig.users().get(i);
-                userRepository.save(new User((long) i+1, configuredWallet.username(), configuredWallet.password()));
+            for (final var user : appConfig.users()) {
+                userRepository.save(new User(user.username(), user.password()));
             }
         }
     }

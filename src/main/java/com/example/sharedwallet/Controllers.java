@@ -1,6 +1,7 @@
 package com.example.sharedwallet;
 
 import com.example.sharedwallet.model.Payment;
+import com.example.sharedwallet.repository.PaymentRepository;
 import com.example.sharedwallet.repository.UserRepository;
 import com.example.sharedwallet.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class Controllers {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     @GetMapping("/")
     public String home(final Model model) {

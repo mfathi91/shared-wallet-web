@@ -33,8 +33,7 @@ public class Balance {
     public Balance() {
     }
 
-    public Balance(Long id, Wallet wallet, User user, BigDecimal amount) {
-        this.id = id;
+    public Balance(Wallet wallet, User user, BigDecimal amount) {
         this.wallet = wallet;
         this.user = user;
         this.amount = amount;

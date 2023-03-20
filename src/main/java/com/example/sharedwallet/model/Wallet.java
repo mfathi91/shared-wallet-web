@@ -24,8 +24,7 @@ public class Wallet {
     public Wallet() {
     }
 
-    public Wallet(Long id, String currency, String symbol) {
-        this.id = id;
+    public Wallet(String currency, String symbol) {
         this.currency = currency;
         this.symbol = symbol;
     }

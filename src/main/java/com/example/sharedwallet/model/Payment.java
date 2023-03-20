@@ -40,8 +40,7 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(Long id, Wallet wallet, User user, BigDecimal amount, String note, LocalDateTime dateTime) {
-        this.id = id;
+    public Payment(Wallet wallet, User user, BigDecimal amount, String note, LocalDateTime dateTime) {
         this.wallet = wallet;
         this.user = user;
         this.amount = amount;
