@@ -12,26 +12,26 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 
 <div class="d-flex justify-content-center">
-    <form action="updateWallet" method="post">
+    <form action="updateWallet" th:object="${updateWalletForm}" method="post">
         <div class="mb-3">
             <label for="wallet" class="form-label">Which wallet to update?</label>
-            <select class="form-select" id="wallet" name="wallet">
+            <select class="form-select" id="wallet" th:field="*{currency}" name="wallet">
                 <option th:each="wallet : ${wallets}" th:value="${wallet.currency}" th:text="${wallet.currency}"></option>
             </select>
         </div>
         <div class="mb-3">
             <label for="payer" class="form-label">Whose balance to increase?</label>
-            <select class="form-select" id="payer" name="payer">
+            <select class="form-select" id="payer" th:field="*{payer}" name="payer">
                 <option th:each="user : ${users}" th:value="${user.username}" th:text="${user.username}"></option>
             </select>
         </div>
         <div class="mb-3">
             <label for="amount" class="form-label">Amount</label>
-            <input type="text" class="form-control" id="amount" name="amount">
+            <input type="text" class="form-control" id="amount" th:field="*{amount}">
         </div>
         <div class="mb-3">
             <label for="note" class="form-label">Note</label>
-            <input type="text" class="form-control" id="note" name="note">
+            <input type="text" class="form-control" id="note" th:field="*{note}">
             <div id="noteHelp" class="form-text">Specify the note that you want to attach to this payment.</div>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
