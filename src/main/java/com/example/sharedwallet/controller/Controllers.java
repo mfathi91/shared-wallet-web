@@ -1,9 +1,8 @@
 package com.example.sharedwallet.controller;
 
 import com.example.sharedwallet.AppConfig;
+import com.example.sharedwallet.model.Balance;
 import com.example.sharedwallet.model.Payment;
-import com.example.sharedwallet.model.User;
-import com.example.sharedwallet.model.Wallet;
 import com.example.sharedwallet.repository.BalanceRepository;
 import com.example.sharedwallet.repository.PaymentRepository;
 import com.example.sharedwallet.repository.UserRepository;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class Controllers {
@@ -61,11 +59,32 @@ public class Controllers {
     public String updateWalletPost(@RequestParam("wallet") String currency, @RequestParam("payer") String payerUsername,
             @RequestParam BigDecimal amount, @RequestParam String note) {
 
-        final User payer = userRepository.findByUsernameOrThrow(payerUsername);
-        final User payee = userRepository.findByUsernameNotEqualOrThrow(payerUsername);
-        final Wallet wallet = walletRepository.findByCurrencyOrThrow(currency);
+        final var payer = userRepository.findByUsernameOrThrow(payerUsername);
+        final var payee = userRepository.findByUsernameNotEqualOrThrow(payerUsername);
+        final var wallet = walletRepository.findByCurrencyOrThrow(currency);
+
+        /* Calculate the new balance. */
+        final var oldBalanceOptional = balanceRepository.findByWallet(wallet);
+        if (oldBalanceOptional.isEmpty()) {
+            balanceRepository.save(new Balance(wallet, payer, amount));
+        } else {
+            var oldBalance = oldBalanceOptional.orElseThrow();
+            final BigDecimal oldAmount = oldBalance.getAmount();
+            if (oldBalance.getUser().getUsername().equals(payer.getUsername())) {
+                oldBalance.setAmount(oldAmount.add(amount));
+                balanceRepository.save(oldBalance);
+            } else {
+                if (oldAmount.subtract(amount).compareTo(BigDecimal.ZERO) > 0) {
+                    oldBalance.setAmount(oldAmount.subtract(amount));
+                } else {
+                    oldBalance.setAmount(amount.subtract(oldAmount));
+                    oldBalance.setUser(payer);
+                }
+                balanceRepository.save(oldBalance);
+            }
+        }
         paymentRepository.save(new Payment(wallet, payer, amount, note, LocalDateTime.now()));
-        return "success.html";
+        return "redirect:/status";
     }
 
     @GetMapping("/status")
