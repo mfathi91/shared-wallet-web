@@ -7,5 +7,10 @@ import java.util.Optional;
 
 public interface WalletRepository extends JpaRepository<Wallet, Long> {
 
-    Optional<Wallet> findByCurrency(String currency);
+    Optional<Wallet> findByCurrency(final String currency);
+
+    default Wallet findByCurrencyOrThrow(final String currency) {
+        return findByCurrency(currency)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("No wallet with currency [%s] found", currency)));
+    }
 }

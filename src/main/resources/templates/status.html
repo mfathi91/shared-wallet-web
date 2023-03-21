@@ -10,11 +10,24 @@
 
 <h2 class="text-center">Shared Wallet Portal</h2>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-<div class="d-grid gap-2 col-6 mx-auto">
-    <a class="btn btn-primary" href="updateWallet">Update wallet</a>
-    <a class="btn btn-primary" href="status">Status</a>
-    <a class="btn btn-primary">Show the last 5 payments</a>
-    <a class="btn btn-primary">History</a>
-</div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Wallet</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Creditor</th>
+        <th scope="col">Debtor</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="balance : ${balances}">
+        <td th:text="${balance.currency}"></td>
+        <td th:text="${balance.amount}"></td>
+        <td th:text="${balance.creditor}"></td>
+        <td th:text="${balance.debtor}"></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>
