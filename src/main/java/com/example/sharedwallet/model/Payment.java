@@ -97,6 +97,30 @@ public class Payment {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Payment payment = (Payment) o;
+
+        if (!wallet.equals(payment.wallet)) return false;
+        if (!user.equals(payment.user)) return false;
+        if (!amount.equals(payment.amount)) return false;
+        if (!note.equals(payment.note)) return false;
+        return dateTime.equals(payment.dateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = wallet.hashCode();
+        result = 31 * result + user.hashCode();
+        result = 31 * result + amount.hashCode();
+        result = 31 * result + note.hashCode();
+        result = 31 * result + dateTime.hashCode();
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Payment{" +
                 "id=" + id +

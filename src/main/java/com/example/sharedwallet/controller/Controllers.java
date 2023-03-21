@@ -3,6 +3,8 @@ package com.example.sharedwallet.controller;
 import com.example.sharedwallet.AppConfig;
 import com.example.sharedwallet.model.Balance;
 import com.example.sharedwallet.model.Payment;
+import com.example.sharedwallet.model.User;
+import com.example.sharedwallet.model.Wallet;
 import com.example.sharedwallet.repository.BalanceRepository;
 import com.example.sharedwallet.repository.PaymentRepository;
 import com.example.sharedwallet.repository.UserRepository;
@@ -61,31 +63,36 @@ public class Controllers {
     public String updateWalletPost( @ModelAttribute("updateWalletForm") UpdateWalletForm form, Model model) {
 
         final var payer = userRepository.findByUsernameOrThrow(form.getPayer());
-        final var payee = userRepository.findByUsernameNotEqualOrThrow(form.getPayer());
         final var wallet = walletRepository.findByCurrencyOrThrow(form.getCurrency());
-
-        /* Calculate the new balance. */
-        final var oldBalanceOptional = balanceRepository.findByWallet(wallet);
-        if (oldBalanceOptional.isEmpty()) {
-            balanceRepository.save(new Balance(wallet, payer, form.getAmount()));
-        } else {
-            var oldBalance = oldBalanceOptional.orElseThrow();
-            final BigDecimal oldAmount = oldBalance.getAmount();
-            if (oldBalance.getUser().getUsername().equals(payer.getUsername())) {
-                oldBalance.setAmount(oldAmount.add(form.getAmount()));
-                balanceRepository.save(oldBalance);
-            } else {
-                if (oldAmount.subtract(form.getAmount()).compareTo(BigDecimal.ZERO) > 0) {
-                    oldBalance.setAmount(oldAmount.subtract(form.getAmount()));
-                } else {
-                    oldBalance.setAmount(form.getAmount().subtract(oldAmount));
-                    oldBalance.setUser(payer);
-                }
-                balanceRepository.save(oldBalance);
-            }
-        }
+        balanceRepository.save(calcNewBalance(form, payer, wallet));
         paymentRepository.save(new Payment(wallet, payer, form.getAmount(), form.getNote(), LocalDateTime.now()));
         return "redirect:/status";
+    }
+
+    private Balance calcNewBalance(final UpdateWalletForm form, final User payer, final Wallet wallet) {
+
+        Balance newBalance;
+        final var amount = form.getAmount();
+        final var currBalanceOptional = balanceRepository.findByWallet(wallet);
+        if (currBalanceOptional.isEmpty()) {
+            newBalance = new Balance(wallet, payer, amount);
+        } else {
+            final var currBalance = currBalanceOptional.orElseThrow();
+            final var currBalanceAmount = currBalance.getAmount();
+            final var currBalanceCreditor = currBalance.getUser();
+            if (currBalanceCreditor.getUsername().equals(form.getPayer())) {
+                currBalance.setAmount(amount.add(currBalanceAmount));
+            } else {
+                if (currBalanceAmount.subtract(amount).compareTo(BigDecimal.ZERO) > 0) {
+                    currBalance.setAmount(currBalanceAmount.subtract(amount));
+                } else {
+                    currBalance.setAmount(amount.subtract(currBalanceAmount));
+                    currBalance.setUser(payer);
+                }
+            }
+            newBalance = currBalance;
+        }
+        return newBalance;
     }
 
     @GetMapping("/status")

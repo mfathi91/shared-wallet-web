@@ -72,6 +72,26 @@ public class Balance {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Balance balance = (Balance) o;
+
+        if (!wallet.equals(balance.wallet)) return false;
+        if (!user.equals(balance.user)) return false;
+        return amount.equals(balance.amount);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = wallet.hashCode();
+        result = 31 * result + user.hashCode();
+        result = 31 * result + amount.hashCode();
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Balance{" +
                 "id=" + id +
