@@ -20,17 +20,15 @@
             <thead>
             <tr>
                 <th scope="col" class="text-center">Wallet</th>
-                <th scope="col" class="text-center">Amount</th>
-                <th scope="col" class="text-center">Creditor</th>
-                <th scope="col" class="text-center">Debtor</th>
+                <th scope="col" class="text-center" th:text="${username1}"></th>
+                <th scope="col" class="text-center" th:text="${username2}"></th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="balance : ${balances}">
                 <td th:text="${balance.currency}" class="text-center"></td>
-                <td th:text="${balance.amount}" class="text-center"></td>
-                <td th:text="${balance.creditor}" class="text-center"></td>
-                <td th:text="${balance.debtor}" class="text-center"></td>
+                <td th:text="${balance.userBalance1}" class="text-center"></td>
+                <td th:text="${balance.userBalance2}" class="text-center"></td>
             </tr>
             </tbody>
         </table>

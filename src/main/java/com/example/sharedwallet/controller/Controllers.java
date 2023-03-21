@@ -14,6 +14,7 @@ import com.example.sharedwallet.view.UpdateWalletForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class Controllers {
@@ -98,13 +100,35 @@ public class Controllers {
     @GetMapping("/status")
     public String status(final Model model) {
 
-        final var balanceViewList = new ArrayList<>();
-        for (final var balance : balanceRepository.findAll()) {
-            balanceViewList.add(new BalanceView(balance.getWallet().getCurrency(), balance.getAmount(), balance.getUser().getUsername(), "Debtor"));
-        }
-        model.addAttribute("balances", balanceViewList);
-//        model.addAttribute("payments", Database.getPayments());
+        final var users = userRepository.findAll();
+        final var user1 = users.get(0);
+        final var user2 = users.get(1);
+        model.addAttribute("username1", user1.getUsername());
+        model.addAttribute("username2", user2.getUsername());
+        final var balances = balanceRepository.findAll(Sort.by(Sort.Direction.ASC, "wallet.currency"));
+        model.addAttribute("balances", getBalanceViews(balances, user1, user2));
         return "status.html";
+    }
+
+    private List<BalanceView> getBalanceViews(final List<Balance> balances, final User user1, final User user2) {
+
+        final List<BalanceView> balanceViewList = new ArrayList<>();
+        for (final var balance : balances) {
+            final var creditor = balance.getUser();
+            final String userBalance1;
+            final String userBalance2;
+            if (creditor.equals(user1)) {
+                userBalance1 = String.format("%s %s", balance.getAmount(), balance.getWallet().getSymbol());
+                userBalance2 = String.format("0 %s", balance.getWallet().getSymbol());
+            } else if (creditor.equals(user2)){
+                userBalance1 = String.format("0 %s", balance.getWallet().getSymbol());
+                userBalance2 = String.format("%s %s", balance.getAmount(), balance.getWallet().getSymbol());
+            } else {
+                throw new IllegalStateException("Creditor user is not equal to the existing users");
+            }
+            balanceViewList.add(new BalanceView(balance.getWallet().getCurrency(), userBalance1, userBalance2));
+        }
+        return balanceViewList;
     }
 
     @GetMapping("/payments")
