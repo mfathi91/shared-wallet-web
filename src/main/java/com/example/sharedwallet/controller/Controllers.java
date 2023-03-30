@@ -141,6 +141,6 @@ public class Controllers {
                     payment.getWallet().getCurrency(), payment.getNote(), payment.getDateTime().toString()));
         }
         model.addAttribute("payments", paymentViewList);
-        return "last-payments.html";
+        return "payments.html";
     }
 }
