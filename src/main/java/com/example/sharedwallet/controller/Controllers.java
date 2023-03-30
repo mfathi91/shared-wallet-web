@@ -10,6 +10,7 @@ import com.example.sharedwallet.repository.PaymentRepository;
 import com.example.sharedwallet.repository.UserRepository;
 import com.example.sharedwallet.repository.WalletRepository;
 import com.example.sharedwallet.view.BalanceView;
+import com.example.sharedwallet.view.PaymentView;
 import com.example.sharedwallet.view.UpdateWalletForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,7 +135,12 @@ public class Controllers {
     @GetMapping("/payments")
     public String payments(final Model model) {
 
-//        model.addAttribute("payments", Database.getPayments());
-        return "payments.html";
+        final List<PaymentView> paymentViewList = new ArrayList<>();
+        for (final var payment : paymentRepository.findAll()) {
+            paymentViewList.add(new PaymentView(payment.getUser().getUsername(), payment.getAmount().toString(),
+                    payment.getWallet().getCurrency(), payment.getNote(), payment.getDateTime().toString()));
+        }
+        model.addAttribute("payments", paymentViewList);
+        return "last-payments.html";
     }
 }
