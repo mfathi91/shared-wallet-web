@@ -47,7 +47,7 @@ public class Controllers {
 
     private final Logger logger = LoggerFactory.getLogger(Controllers.class);
 
-    @GetMapping("/")
+    @GetMapping(value = {"/", "/home"})
     public String home(final Model model) {
 
         return "home.html";
