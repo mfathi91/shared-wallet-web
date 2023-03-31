@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -21,10 +23,9 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .permitAll()
-                )
+                .formLogin()
+                .and()
+                .addFilterBefore(new DefaultLoginPageGeneratingFilter(), UsernamePasswordAuthenticationFilter.class)
                 .logout(LogoutConfigurer::permitAll);
 
         http.csrf().disable();
