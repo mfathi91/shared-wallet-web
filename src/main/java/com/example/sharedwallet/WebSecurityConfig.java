@@ -1,5 +1,6 @@
 package com.example.sharedwallet;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,9 +14,15 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+
+    @Autowired
+    private AppConfig appConfig;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,13 +41,14 @@ public class WebSecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("user")
-                        .password("password")
-                        .roles("USER")
-                        .build();
-
-        return new InMemoryUserDetailsManager(user);
+        final List<UserDetails> userDetailsList = new ArrayList<>();
+        for (final var user : appConfig.users()) {
+            userDetailsList.add(User.builder()
+                    .username(user.username())
+                    .password(String.format("{noop}%s", user.password()))
+                    .roles("USER")
+                    .build());
+        }
+        return new InMemoryUserDetailsManager(userDetailsList);
     }
 }
