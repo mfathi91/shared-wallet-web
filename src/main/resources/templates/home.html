@@ -14,6 +14,9 @@
     <a class="btn btn-primary" href="updateWallet">Update wallet</a>
     <a class="btn btn-primary" href="status">Status</a>
     <a class="btn btn-primary" href="payments">Show the last 5 payments</a>
+    <form class="p-2 mx-auto" th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out" class="btn btn-danger"/>
+    </form>
 </div>
 </body>
 </html>
